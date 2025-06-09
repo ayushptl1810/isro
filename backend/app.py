@@ -104,6 +104,13 @@ def handle_start_process():
     thread.daemon = True
     thread.start()
 
+
+@app.route('/api/data', methods=['GET'])
+def get_data():
+    with open('sample_data.json', 'r') as file:
+        data = json.load(file)
+    return jsonify(data)
+
 if __name__ == "__main__":
     # Use socketio.run instead of app.run to enable WebSocket support
     socketio.run(
