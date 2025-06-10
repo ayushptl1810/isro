@@ -14,10 +14,10 @@ export const LiveSensorReadings = () => {
   return (
     <div className="panel">
       <h2 className="title">Live Sensor Readings</h2>
-      <div className=" gap-4">
+      <div className="gap-4 my-5">
         {/* Distance Sensors */}
         <div>
-          <h3 className="subtitle text-sm">Distance Sensors</h3>
+          <h3 className="subtitle text-sm mt-2">Distance Sensors</h3>
           <div className="space-y-2">
             <SensorValue label="D0" value={sensorData?.D0} />
             <SensorValue label="D1" value={sensorData?.D1} />
@@ -25,8 +25,8 @@ export const LiveSensorReadings = () => {
         </div>
 
         {/* Optical Flow */}
-        <div>
-          <h3 className="subtitle text-sm">Optical Flow</h3>
+        <div className="my-5">
+          <h3 className="subtitle text-sm mt-2">Optical Flow</h3>
           <div className="space-y-2">
             <SensorValue label="Flow X" value={sensorData?.F?.flow_x} />
             <SensorValue label="Flow Y" value={sensorData?.F?.flow_y} />
@@ -35,11 +35,11 @@ export const LiveSensorReadings = () => {
         </div>
 
         {/* IMU Data */}
-        <div>
-          <h3 className="subtitle text-sm space-y-2">IMU Data</h3>
-          <div className="gap-x-2">
+        <div className="my-5">
+          <h3 className="subtitle text-sm mt-2">IMU Data</h3>
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <h4 className="text-xs text-gray-400 mb-1 space-y-2">Accel</h4>
+              <h4 className="text-xs text-gray-400 mb-1">Accel</h4>
               <div className="space-y-2">
                 <SensorValue label="X" value={sensorData?.I?.A.xacc} />
                 <SensorValue label="Y" value={sensorData?.I?.A.yacc} />
@@ -47,7 +47,7 @@ export const LiveSensorReadings = () => {
               </div>
             </div>
             <div>
-              <h4 className="text-xs text-gray-400 mb-1 space-y-2">Gyro</h4>
+              <h4 className="text-xs text-gray-400 mb-1">Gyro</h4>
               <div className="space-y-2">
                 <SensorValue label="X" value={sensorData?.I?.G.xgyro} />
                 <SensorValue label="Y" value={sensorData?.I?.G.ygyro} />
@@ -58,8 +58,8 @@ export const LiveSensorReadings = () => {
         </div>
 
         {/* GPS Data */}
-        <div>
-          <h3 className="subtitle text-sm space-y-2">GPS Data</h3>
+        <div className="my-5">
+          <h3 className="subtitle text-sm">GPS Data</h3>
           <div className="space-y-2">
             <SensorValue label="Lat" value={sensorData?.G?.latitude} />
             <SensorValue label="Lon" value={sensorData?.G?.longitude} />

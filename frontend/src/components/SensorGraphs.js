@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -23,65 +23,83 @@ ChartJS.register(
 );
 
 export const SensorGraphs = () => {
-  const { sensorData, timeWindow } = useSensorData();
-  const [distanceData, setDistanceData] = useState([]);
-  const [gpsData, setGpsData] = useState([]);
-  const chartRef = useRef(null);
-
-  useEffect(() => {
-    if (!sensorData) return;
-
-    const now = Date.now();
-    const cutoff = now - timeWindow * 1000;
-
-    // Update distance data
-    if (sensorData.D0 || sensorData.D1) {
-      setDistanceData((prev) => {
-        const newData = [
-          ...prev,
-          {
-            timestamp: now,
-            value: parseFloat(sensorData.D0?.replace("cm", "") || "0"),
-          },
-        ].filter((point) => point.timestamp > cutoff);
-        return newData;
-      });
-    }
-
-    // Update GPS data
-    if (sensorData.G?.latitude && sensorData.G?.longitude) {
-      setGpsData((prev) => {
-        const newData = [
-          ...prev,
-          {
-            timestamp: now,
-            value: parseFloat(sensorData.G?.latitude || "0"),
-          },
-        ].filter((point) => point.timestamp > cutoff);
-        return newData;
-      });
-    }
-  }, [sensorData, timeWindow]);
+  const { historicalData } = useSensorData();
 
   const distanceChartData = {
-    labels: distanceData.map((d) => new Date(d.timestamp).toLocaleTimeString()),
+    labels: historicalData.timestamps.map((t) =>
+      new Date(t).toLocaleTimeString()
+    ),
     datasets: [
       {
-        label: "Distance (cm)",
-        data: distanceData.map((d) => d.value),
+        label: "Distance D0 (cm)",
+        data: historicalData.values.D0.map((d) =>
+          parseFloat(d?.replace("cm", "") || "0")
+        ),
         borderColor: "rgb(75, 192, 192)",
+        tension: 0.1,
+      },
+      {
+        label: "Distance D1 (cm)",
+        data: historicalData.values.D1.map((d) =>
+          parseFloat(d?.replace("cm", "") || "0")
+        ),
+        borderColor: "rgb(255, 99, 132)",
         tension: 0.1,
       },
     ],
   };
 
   const gpsChartData = {
-    labels: gpsData.map((d) => new Date(d.timestamp).toLocaleTimeString()),
+    labels: historicalData.timestamps.map((t) =>
+      new Date(t).toLocaleTimeString()
+    ),
     datasets: [
       {
-        label: "GPS Movement",
-        data: gpsData.map((d) => d.value),
+        label: "GPS Latitude",
+        data: historicalData.values.G.map((g) =>
+          parseFloat(g?.latitude || "0")
+        ),
+        borderColor: "rgb(75, 192, 192)",
+        tension: 0.1,
+      },
+      {
+        label: "GPS Longitude",
+        data: historicalData.values.G.map((g) =>
+          parseFloat(g?.longitude || "0")
+        ),
         borderColor: "rgb(255, 99, 132)",
+        tension: 0.1,
+      },
+    ],
+  };
+
+  const imuChartData = {
+    labels: historicalData.timestamps.map((t) =>
+      new Date(t).toLocaleTimeString()
+    ),
+    datasets: [
+      {
+        label: "Gyro X",
+        data: historicalData.values.I.map((i) =>
+          parseFloat(i?.G?.xgyro || "0")
+        ),
+        borderColor: "rgb(255, 99, 132)",
+        tension: 0.1,
+      },
+      {
+        label: "Gyro Y",
+        data: historicalData.values.I.map((i) =>
+          parseFloat(i?.G?.ygyro || "0")
+        ),
+        borderColor: "rgb(75, 192, 192)",
+        tension: 0.1,
+      },
+      {
+        label: "Gyro Z",
+        data: historicalData.values.I.map((i) =>
+          parseFloat(i?.G?.zgyro || "0")
+        ),
+        borderColor: "rgb(153, 102, 255)",
         tension: 0.1,
       },
     ],
@@ -133,6 +151,12 @@ export const SensorGraphs = () => {
           <h3 className="subtitle">GPS Movement</h3>
           <div className="h-64">
             <Line data={gpsChartData} options={chartOptions} />
+          </div>
+        </div>
+        <div>
+          <h3 className="subtitle">IMU Data</h3>
+          <div className="h-64">
+            <Line data={imuChartData} options={chartOptions} />
           </div>
         </div>
       </div>

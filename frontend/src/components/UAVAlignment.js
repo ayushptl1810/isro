@@ -4,6 +4,10 @@ import { useSensorData } from "../context/SensorContext";
 const UAVAlignment = () => {
   const { sensorData } = useSensorData();
 
+  // Tolerance values in degrees
+  const ROLL_TOLERANCE = 5; // Roll is unstable beyond ±5 degrees
+  const PITCH_TOLERANCE = 5; // Pitch is unstable beyond ±5 degrees
+
   // Get gyroscope data, defaulting to 0 if not available
   const gyroX = parseFloat(sensorData?.I?.G?.xgyro || 0);
   const gyroY = parseFloat(sensorData?.I?.G?.ygyro || 0);
@@ -13,6 +17,10 @@ const UAVAlignment = () => {
   // Note: In a real application, you'd want to use proper quaternion or euler angle calculations
   const pitch = Math.min(Math.max(gyroY * 2, -45), 45); // Limit to ±45 degrees
   const roll = Math.min(Math.max(gyroX * 2, -45), 45); // Limit to ±45 degrees
+
+  // Determine stability status
+  const isRollStable = Math.abs(roll) <= ROLL_TOLERANCE;
+  const isPitchStable = Math.abs(pitch) <= PITCH_TOLERANCE;
 
   return (
     <div className="panel">
@@ -71,22 +79,27 @@ const UAVAlignment = () => {
         <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
           <div
             className={`px-3 py-1 rounded ${
-              Math.abs(roll) > 30
-                ? "bg-red-500/20 text-red-400"
-                : "bg-green-500/20 text-green-400"
+              isRollStable
+                ? "bg-green-500/20 text-green-400"
+                : "bg-red-500/20 text-red-400"
             }`}
           >
-            Roll {Math.abs(roll) > 30 ? "Critical" : "Stable"}
+            Roll {isRollStable ? "Stable" : "Unstable"}
           </div>
           <div
             className={`px-3 py-1 rounded ${
-              Math.abs(pitch) > 30
-                ? "bg-red-500/20 text-red-400"
-                : "bg-green-500/20 text-green-400"
+              isPitchStable
+                ? "bg-green-500/20 text-green-400"
+                : "bg-red-500/20 text-red-400"
             }`}
           >
-            Pitch {Math.abs(pitch) > 30 ? "Critical" : "Stable"}
+            Pitch {isPitchStable ? "Stable" : "Unstable"}
           </div>
+        </div>
+
+        {/* Tolerance Info */}
+        <div className="mt-2 text-xs text-gray-400">
+          Tolerance: ±{ROLL_TOLERANCE}°
         </div>
       </div>
     </div>
