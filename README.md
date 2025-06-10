@@ -30,9 +30,7 @@ This is a full-stack application with a Flask backend API and React frontend.
    pip install -r requirements.txt
    ```
 
-3. Create a `.env` file in the backend directory (copy from .env.example if available)
-
-4. Run the backend:
+3. Run the backend:
    ```bash
    cd backend
    python app.py
@@ -49,13 +47,7 @@ The backend will run on http://localhost:5000
    npm install
    ```
 
-2. Create a `.env` file in the frontend directory with:
-
-   ```
-   REACT_APP_API_URL=http://localhost:5000/api
-   ```
-
-3. Run the frontend:
+2. Run the frontend:
    ```bash
    npm start
    ```
@@ -74,13 +66,7 @@ The frontend will run on http://localhost:3000
 ### Backend
 
 - `python app.py` - Run the Flask development server
-- `pytest` - Run backend tests
-- `black .` - Format Python code
-- `flake8` - Lint Python code
 
 ### Frontend
 
 - `npm start` - Run the React development server
-- `npm test` - Run frontend tests
-- `npm run build` - Build for production
-- `npm run lint` - Lint frontend code
