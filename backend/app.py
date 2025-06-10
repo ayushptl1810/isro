@@ -270,12 +270,6 @@ def handle_reset_data():
         socketio.emit('connection_failed', f'Error during reset: {str(e)}')
         return {'status': 'error', 'message': str(e)}
 
-@app.route('/api/data', methods=['GET'])
-def get_data():
-    with open('sample_data.json', 'r') as file:
-        data = json.load(file)
-    return jsonify(data)
-
 if __name__ == "__main__":
     try:
         print("Starting server...")
